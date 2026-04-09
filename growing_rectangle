@@ -1,0 +1,52 @@
+import pygame
+pygame.init()
+screen = pygame.display.set_mode((500,500))
+run = True
+
+class Rectangle():
+    def __init__ (self, size, color, pos, width):
+        self.size = size
+        self.color = color
+        self.pos = pos
+        self.width = width
+        self.screen = screen
+    
+    def Draw(self):
+        rect = pygame.Rect(self.pos[0], self.pos[1], self.size, self.size)
+        pygame.draw.rect(self.screen, self.color, rect, self.width)
+
+    def grow(self, r):
+        self.size += r
+        rect = pygame.Rect(self.pos[0], self.pos[1], self.size, self.size)
+        pygame.draw.rect(self.screen, self.color, rect, self.width)
+
+
+rect_obj = None
+
+
+while run:
+    for i in pygame.event.get():
+        if i.type == pygame.QUIT:
+            run = False
+
+        if i.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+
+            if rect_obj is None:
+                rect_obj = Rectangle(10, "red", pos, 0)
+
+            screen.fill("yellow")
+            if rect_obj:
+                rect_obj.Draw()
+            pygame.display.update()
+
+        elif i.type == pygame.MOUSEBUTTONUP:
+            screen.fill("yellow")
+            if rect_obj:
+                rect_obj.pos = pygame.mouse.get_pos()  
+                rect_obj.grow(10)
+            pygame.display.update()
+
+        elif i.type == pygame.MOUSEMOTION:
+            pos = pygame.mouse.get_pos()
+            pygame.display.update()
